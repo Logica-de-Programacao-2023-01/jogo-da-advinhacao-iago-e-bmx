@@ -1,0 +1,60 @@
+package main
+
+import (
+	"fmt"
+	"math/rand"
+	"time"
+)
+
+func main() {
+
+	//VARIÁVEIS
+	var randomNumber int
+	var tentativas []int
+	var totaltentativas [][]int
+	again := "s"
+
+	//INTRODUÇÃO
+	fmt.Println("Bem-vindo ao Jogo da Adivinhação!")
+	fmt.Println("-----------------------------------")
+	fmt.Println()
+
+	//JOGANDO NOVAMENTE
+	for again != "n" {
+		//GERANDO NÚMERO ALEATÓRIO
+		source := rand.NewSource(time.Now().UnixNano())
+		random := rand.New(source)
+		randomNumber = random.Intn(100) + 1
+		guess := 101
+
+		//TENTATIVA DO USUÁRIO
+		for guess != randomNumber {
+			fmt.Print("Digite um número entre 1 e 100: ")
+			fmt.Scan(&guess)
+			if guess > randomNumber {
+				fmt.Println("O número é menor que ", guess)
+			} else if guess < randomNumber {
+				fmt.Println("O número é maior que ", guess)
+			}
+			//ADICIONANDO AS TENTATIVAS EM UM SLICE
+			tentativas = append(tentativas, guess)
+		}
+		totaltentativas = append(totaltentativas, tentativas)
+
+		fmt.Println("-----------------------------------")
+		fmt.Println("Parabéns você acertou!")
+		fmt.Printf("Você utilizou %d tentativas\n", len(tentativas))
+		fmt.Print("Deseja continuar? (s/n) ")
+		fmt.Scan(&again)
+		if again == "s" {
+			fmt.Println("-----------------------------------")
+			fmt.Println()
+		}
+		tentativas = nil
+	}
+
+	//TESTE
+	for i := range totaltentativas {
+		fmt.Printf("\nNa %dª rodada foram feitas %d tentativas.\n", i+1, len(totaltentativas[i]))
+	}
+}
